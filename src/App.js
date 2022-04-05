@@ -1,26 +1,48 @@
 import React from 'react';
 import logo from './logo.svg';
+import './App.scss';
 import './App.css';
-
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Route, Link, Switch, Router } from 'react-router-dom'
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="#home">
+            <img
+              alt=""
+              src={ logo }
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+            />{' '}
+          React Bootstrap
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+      <Switch>
+        <Route path="/">
+          <Main></Main>
+        </Route>
+        <Route path="/Upload">
+          
+        </Route>
+        <Route path="/:detail">
+          
+        </Route>
+      </Switch>
+      
     </div>
   );
+}
+
+function Main(props) {
+  return(
+    <div>
+      메인페이지
+    </div>
+  )
 }
 
 export default App;
