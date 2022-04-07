@@ -1,5 +1,5 @@
 @import './App.css';
-
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
 $skyblue : #ebfaff;
 $skyblueBoxShadowing : 5px 15px 25px rgba(173, 216, 230, 0.8);
 $defaultBoxShadowing: 10px 10px 30px rgba(0, 0, 0, 0.1);
@@ -54,13 +54,12 @@ p {
     svg {
         font-size: 25px;
         color: #666;
-        
         &:hover {
             color: black;
         }
     }
     .icons_right {
-        width: 120px;
+        width: 140px;
         @include Flex(row, center, space-between);
     }
 }
@@ -92,18 +91,19 @@ p {
     @include Flex(column, center, flex-start);
     .element {
         @include Flex(row, flex-start, space-around);
-        width: 400px;
+        width: 330px;
         padding: 10px 50px;
         border-radius: 15px;
         margin: 3px;
         .circle {
-            color: #999;
+            color: #888;
+            font-size: 22px;
         }
         .content {
-            color: #999;
-            font-size: 18px;
+            color: #888;
+            font-size: 22px;
             width: 100%;
-            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-family: 'Gamja Flower', cursive;
             font-weight: bold;
 
             &:hover {
@@ -143,15 +143,16 @@ p {
         border-radius: 14px;
         border: none;
         color: white;
-        margin-bottom: 100px;
+        margin-bottom: 80px;
     }
 }
 
 
 .detail {
+    padding-bottom: 40px;
     h2 {
         color: #777;
-        font-family:'Times New Roman', Times, serif;
+        font-family: 'Gamja Flower', cursive;
         font-weight: bold;
         margin-top: 33px;
     }
@@ -159,14 +160,15 @@ p {
         font-size: 15px;
         font-weight: bold;
         margin-top: 10px;
-        font-family: sans-serif;
+        font-family: 'Gamja Flower', cursive;
         &.completed {
-            font-family:Arial, Helvetica, sans-serif;
+            font-family: 'Gamja Flower', cursive;
             color: rgba(red, 0.6);
         }
         &.uncompleted {
             color: #999;
         }
     }
+    
 }
 

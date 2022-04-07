@@ -6,12 +6,12 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Route, Link, Switch, Router, useHistory, useParams } from 'react-router-dom'
 import data from './data.js';
 import profileImg from './기본프로필이미지.jfif';
-import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan, faWrench, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function App() {
   let [todos, todosEdit] = useState(data);
   let [text, textEdit] = useState('');
-  let [todosCount, todosCountEdit] = useState(3);
+  let [todosCount, todosCountEdit] = useState(0);
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -51,6 +51,7 @@ function Main(props) {
   let todosCountEdit = props.todosCountEdit;
   let [onOff, onOffEdit] = useState(false);
   let [deleteIndex, deleteIndexEdit] = useState(0);
+  let [checkIndex, checkIndexEdit] = useState(0);
   return(
     <>
       <div className="container_main">
@@ -60,15 +61,24 @@ function Main(props) {
             {
               onOff ? 
               <>
+                <FontAwesomeIcon icon={ faWrench } onClick={ () => {
+                  console.log(todos);
+                }}/>
+                <FontAwesomeIcon icon={ faCheck } onClick={ () => {
+                  let copy = [...todos];
+                  copy[checkIndex].completed = true;
+                  todosEdit(copy);
+                } }/>
                 <FontAwesomeIcon icon={ faPenToSquare } className="pen"/>
                 <FontAwesomeIcon icon={ faTrashCan } className="trash" onClick={ () => {
-                  console.log(deleteIndex);
                   let copy = [...[...todos].slice(0, deleteIndex), ...[...todos].slice(deleteIndex + 1)];
                   todosEdit(copy);
                   history.push('/')
                 }}/>
               </> : 
               <>
+                <div style={ { width: '25px', height: '25px'} }></div>
+                <div style={ { width: '25px', height: '25px'} }></div>
                 <div style={ { width: '25px', height: '25px'} }></div>
                 <div style={ { width: '25px', height: '25px'} }></div>
               </>
@@ -85,7 +95,7 @@ function Main(props) {
         </section>
         <section className="profile_info">
           <h2 style={ { margin: 0 } }>
-            KIM HYUK JOONG
+            Dongubak
           </h2>
           <p style={ { margin: 0 } }>
             Dongubak.github
@@ -98,7 +108,7 @@ function Main(props) {
           </Route>
 
           <Route path="/detail/:id">
-            <Detail todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} onOff={onOff} onOffEdit={onOffEdit} deleteIndexEdit={deleteIndexEdit}>           
+            <Detail todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} onOff={onOff} onOffEdit={onOffEdit} deleteIndexEdit={deleteIndexEdit} checkIndexEdit={ checkIndexEdit }>           
             </Detail>
           </Route>
           
@@ -155,6 +165,7 @@ function UploadForm(props) {
     let uploadData = {
       id: todosCount,
       content: text,
+      completed: false,
     };
     let copy = [...todos, uploadData];
     todosEdit(copy);
@@ -165,7 +176,7 @@ function UploadForm(props) {
     <form onSubmit={ uploadSubmit } className="upload_container">
       <input type="text" onChange={ e => {
         textEdit(e.target.value);
-      }} placeholder="할일 입력하기"></input>
+      }} placeholder="할일 입력하기" autoFocus></input>
       <button type="submit">Add</button>
     </form>
   )
@@ -181,12 +192,14 @@ function Detail(props) {
   let onOff = props.onOff;
   let onOffEdit = props.onOffEdit;
   let deleteIndexEdit = props.deleteIndexEdit;
+  let checkIndexEdit = props.checkIndexEdit;
   let index = todos.findIndex( e => e.id === Number(id));
   let item = todos.find( e => e.id === Number(id));
 
   useEffect(() => {
     onOffEdit(true);
     deleteIndexEdit(index);
+    checkIndexEdit(index);
     return () => { onOffEdit(false) }
   },[])
 
