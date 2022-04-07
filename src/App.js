@@ -6,7 +6,7 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Route, Link, Switch, Router, useHistory, useParams } from 'react-router-dom'
 import data from './data.js';
 import profileImg from './기본프로필이미지.jfif';
-import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan, faWrench, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan, faWrench, faCheck, faHouse, faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function App() {
   let [todos, todosEdit] = useState(data);
@@ -56,7 +56,12 @@ function Main(props) {
     <>
       <div className="container_main">
         <nav className="nav">
-          <FontAwesomeIcon icon={ faBars } className="icons_left"/>
+          <div className="icons_left">
+            <FontAwesomeIcon icon={ faBars }/>
+            <FontAwesomeIcon icon={ faHouseUser } className="home" onClick={ () => {
+              history.push('/');
+            } }/>
+          </div>
           <div className="icons_right">
             {
               onOff ? 

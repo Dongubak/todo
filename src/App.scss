@@ -53,13 +53,18 @@ p {
     @include Flex(row, center, space-between);
     svg {
         font-size: 25px;
-        color: #666;
+        color: #555;
         &:hover {
             color: black;
         }
     }
     .icons_right {
-        width: 140px;
+        width: 150px;
+        @include Flex(row, center, space-between);
+    }
+
+    .icons_left {
+        width: 60px;
         @include Flex(row, center, space-between);
     }
 }
@@ -71,6 +76,7 @@ p {
 
 .profile_info {
     margin-top: 15px;
+    margin-bottom: 15px;
     height: 100px;
     @include Flex(column, center, center);
     h2 {
@@ -91,31 +97,36 @@ p {
     @include Flex(column, center, flex-start);
     .element {
         @include Flex(row, flex-start, space-around);
-        width: 330px;
-        padding: 10px 50px;
+        width: 280px;
+        padding: 10px 30px 10px 20px;
         border-radius: 15px;
         margin: 3px;
         .circle {
-            color: #888;
+            color: #555;
             font-size: 22px;
+            padding-right: 10px;
         }
         .content {
-            color: #888;
+            color: #555;
             font-size: 22px;
             width: 100%;
             font-family: 'Gamja Flower', cursive;
             font-weight: bold;
-
-            &:hover {
-                & {
-                    box-shadow: $skyblueBoxShadowing;
-                    border-radius: 3px;
-                }
-            }
-
         }
         &:last-child {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+        }
+        &:hover {
+            .content {
+                color: black;
+            }
+            .circle {
+                color: black;
+            }
+            & {
+                box-shadow: $skyblueBoxShadowing;
+                border-radius: 15px;
+            }
         }
     }
 }
@@ -130,10 +141,15 @@ p {
         outline: none;
         cursor: default;
         text-align: center;
+        text-decoration: none;
+        width: 400px;
+        height: 50px;
+        font-size: 20px;
+        font-family: 'Gamja Flower', cursive;
     }
 
     button {
-        margin-top: 30px;
+        margin-top: 35px;
         background-color: $skyblueBtnBackgroundColor;
         background: $skyblueBtnBackgroundGradiant;
         box-shadow: $skyblueBtnBox-shadow;
@@ -143,7 +159,10 @@ p {
         border-radius: 14px;
         border: none;
         color: white;
-        margin-bottom: 80px;
+        margin-bottom: 50px;
+        width: 200px;
+        height: 40px;
+        font-size: 20px;
     }
 }
 
@@ -151,7 +170,7 @@ p {
 .detail {
     padding-bottom: 40px;
     h2 {
-        color: #777;
+        color: #555;
         font-family: 'Gamja Flower', cursive;
         font-weight: bold;
         margin-top: 33px;
