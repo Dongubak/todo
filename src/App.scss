@@ -1,1 +1,111 @@
 @import './App.css';
+
+$skyblue : #ebfaff;
+$skyblueBoxShadowing : 5px 15px 25px rgba(173, 216, 230, 0.8);
+$defaultBoxShadowing: 10px 10px 30px rgba(0, 0, 0, 0.1);
+$fontAwesomeColor: #666;
+$h2FontColor: #555;
+$pFontColor: #bbb;
+p {
+    margin: 0;
+}
+
+@mixin Flex($direction, $align, $justify) {
+    display: flex;
+    flex-direction: $direction;
+    align-items: $align;
+    justify-content: $justify;
+}
+
+@mixin WH($width, $height) {
+    width: $width;
+    height: $height;
+    border: 1px solid;
+}
+
+.navbar {
+    height: 5vh;
+}
+
+.App {
+    background: #ebfaff;
+    height: 100vh;
+}
+
+.container_main {
+    margin: 0 auto;
+    border: 1px solid;
+    @include WH(500px, 700px);
+    border-radius: 8px;
+    margin-top: 50px;
+    background: white;
+    box-shadow: $defaultBoxShadowing;
+    border: none;
+}
+
+.nav {
+    
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px 10px 20px;
+
+    svg {
+        font-size: 25px;
+        color: #666;
+    }
+}
+
+.profile_img img {
+    border-radius: 50%;
+    box-shadow: $skyblueBoxShadowing;
+}
+
+.profile_info {
+    margin-top: 15px;
+    height: 100px;
+    @include Flex(column, center, center);
+    h2 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        color: #555;
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    p {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #bbb;
+    }
+}
+
+.todos {
+    height: 300px;
+    @include Flex(column, center, flex-start);
+    .element {
+        @include Flex(row, flex-start, space-around);
+        width: 400px;
+        padding: 10px 50px;
+        border-radius: 15px;
+        margin: 3px;
+        .circle {
+            color: #555;
+        }
+        .content {
+            color: #555;
+            width: 100%;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-weight: bold;
+        }
+    }
+}
+
+
+
+.detail {
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    
+}
