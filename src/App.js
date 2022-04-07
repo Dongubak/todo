@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.scss';
 import './App.css';
@@ -6,15 +6,17 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Route, Link, Switch, Router, useHistory, useParams } from 'react-router-dom'
 import data from './data.js';
 import profileImg from './기본프로필이미지.jfif';
-import { faBars, faPlus, faCircleDot } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function App() {
-  let [todos, todosEdit] = React.useState(data); 
+  let [todos, todosEdit] = useState(data);
+  let [text, textEdit] = useState('');
+  let [todosCount, todosCountEdit] = useState(3);
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand>
             <img
               alt=""
               src={logo}
@@ -22,19 +24,15 @@ function App() {
               height="30"
               className="d-inline-block align-top"
             />{' '}
-          React TodoList
+            <Link to="/" className="navBar_header">
+              React TodoList
+            </Link>
           </Navbar.Brand>
         </Container>
       </Navbar>
       <Switch>
-        <Route path="/Upload">
-          <Upload></Upload>
-        </Route>
-        <Route path="/detail/:id">
-          <Detail></Detail>
-        </Route>
         <Route path="/">
-          <Main todos={ todos }>
+          <Main todos={ todos } todosEdit={ todosEdit } textEdit={ textEdit } text={ text } todosCount={todosCount} todosCountEdit={todosCountEdit}>
           </Main>
         </Route>
       </Switch>
@@ -44,16 +42,45 @@ function App() {
 
 function Main(props) {
   let history = useHistory();
+  let { id } = useParams();
+  let todos = props.todos;
+  let todosEdit = props.todosEdit;
+  let text = props.text;
+  let textEdit = props.textEdit;
+  let todosCount = props.todosCount;
+  let todosCountEdit = props.todosCountEdit;
+  let [onOff, onOffEdit] = useState(false);
+  let [deleteIndex, deleteIndexEdit] = useState(0);
   return(
     <>
       <div className="container_main">
         <nav className="nav">
-          <FontAwesomeIcon icon={ faBars }/>
-          <FontAwesomeIcon icon={ faPlus } />
+          <FontAwesomeIcon icon={ faBars } className="icons_left"/>
+          <div className="icons_right">
+            {
+              onOff ? 
+              <>
+                <FontAwesomeIcon icon={ faPenToSquare } className="pen"/>
+                <FontAwesomeIcon icon={ faTrashCan } className="trash" onClick={ () => {
+                  console.log(deleteIndex);
+                  let copy = [...[...todos].slice(0, deleteIndex), ...[...todos].slice(deleteIndex + 1)];
+                  todosEdit(copy);
+                  history.push('/')
+                }}/>
+              </> : 
+              <>
+                <div style={ { width: '25px', height: '25px'} }></div>
+                <div style={ { width: '25px', height: '25px'} }></div>
+              </>
+            }
+            <FontAwesomeIcon icon={ faPlus } onClick={ () => {
+              history.push('/Upload');
+            } } className="plus"/>
+          </div>
         </nav>
 
         <section className="profile_img">
-          <img src={ profileImg }>
+          <img src={ profileImg } alt="profileImage">
           </img>
         </section>
         <section className="profile_info">
@@ -64,43 +91,113 @@ function Main(props) {
             Dongubak.github
           </p>
         </section>
+        
+        <Switch>
+          <Route path="/Upload">
+            <Upload todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} todosCount={todosCount} todosCountEdit={todosCountEdit}></Upload>
+          </Route>
+
+          <Route path="/detail/:id">
+            <Detail todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} onOff={onOff} onOffEdit={onOffEdit} deleteIndexEdit={deleteIndexEdit}>           
+            </Detail>
+          </Route>
           
-        <main className="todos">
-          {
-            props.todos.map( e => {
-              return(
-                <div className="element" onClick={ () => {
-                  history.push(`/detail/${ e.id }`)
-                } }>
-                  <div className="circle">
-                    <FontAwesomeIcon icon={ faCircleDot } />
-                  </div>
-                  <div className="content">
-                    { e.content }
-                  </div>
-                </div>
-              )
-            })
-          }
-        </main>
+
+          <Route path="/">
+            <main className="todos">
+              {
+                todos.map( (e, i) => {
+                  return(
+                    <div className="element" onClick={ () => {
+                      history.push(`/detail/${ e.id }`);
+                    } } key={ i }>
+                      <div className="circle">
+                        <FontAwesomeIcon icon={ faCircleDot } />
+                      </div>
+                      <div className="content">
+                        { e.content }
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </main>
+          </Route>
+        </Switch>
+
       </div>
     </>
   )
 }
 
 function Upload(props) {
+  let todosEdit = props.todosEdit;
+  let todos = props.todos;
+  let text = props.text;
+  let textEdit = props.textEdit;
+  let todosCount = props.todosCount;
+  let todosCountEdit = props.todosCountEdit;
   return(
-    <div>
-      업로드 페이지
-    </div>
+    <UploadForm todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} todosCount={todosCount} todosCountEdit={todosCountEdit}></UploadForm>
+  )
+}
+
+function UploadForm(props) {
+  let todosEdit = props.todosEdit;
+  let todos = props.todos;
+  let text = props.text;
+  let textEdit = props.textEdit;
+  let todosCount = props.todosCount;
+  let todosCountEdit = props.todosCountEdit;
+  let history = useHistory();
+  function uploadSubmit(e) {
+    e.preventDefault();
+    let uploadData = {
+      id: todosCount,
+      content: text,
+    };
+    let copy = [...todos, uploadData];
+    todosEdit(copy);
+    todosCountEdit(todosCount + 1);
+    history.push('/');
+  }
+  return(
+    <form onSubmit={ uploadSubmit } className="upload_container">
+      <input type="text" onChange={ e => {
+        textEdit(e.target.value);
+      }} placeholder="할일 입력하기"></input>
+      <button type="submit">Add</button>
+    </form>
   )
 }
 
 function Detail(props) {
   let { id } = useParams();
+  let history = useHistory();
+  let todosEdit = props.todosEdit;
+  let todos = props.todos;
+  let text = props.text;
+  let textEdit = props.textEdit;
+  let onOff = props.onOff;
+  let onOffEdit = props.onOffEdit;
+  let deleteIndexEdit = props.deleteIndexEdit;
+  let index = todos.findIndex( e => e.id === Number(id));
+  let item = todos.find( e => e.id === Number(id));
+
+  useEffect(() => {
+    onOffEdit(true);
+    deleteIndexEdit(index);
+    return () => { onOffEdit(false) }
+  },[])
+
   return(
     <div className="detail">
-      
+      <h2>{ item.content }</h2>
+      {
+        item.completed ? 
+        <h3 className="completed">완료!</h3> :
+        <h3 className="uncompleted">미완료!</h3>
+      }
     </div>
   )
 }

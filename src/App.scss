@@ -6,6 +6,9 @@ $defaultBoxShadowing: 10px 10px 30px rgba(0, 0, 0, 0.1);
 $fontAwesomeColor: #666;
 $h2FontColor: #555;
 $pFontColor: #bbb;
+$skyblueBtnBackgroundColor: #444;
+$skyblueBtnBackgroundGradiant: linear-gradient(45deg, #4affff, #35e0f7);
+$skyblueBtnBox-shadow: 5px 10px 20px rgba(0, 255, 255, 0.493);
 p {
     margin: 0;
 }
@@ -35,7 +38,7 @@ p {
 .container_main {
     margin: 0 auto;
     border: 1px solid;
-    @include WH(500px, 700px);
+    @include WH(500px, auto);
     border-radius: 8px;
     margin-top: 50px;
     background: white;
@@ -44,16 +47,21 @@ p {
 }
 
 .nav {
-    
     height: 50px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 15px 20px 10px 20px;
-
+    @include Flex(row, center, space-between);
     svg {
         font-size: 25px;
         color: #666;
+        
+        &:hover {
+            color: black;
+        }
+    }
+    .icons_right {
+        width: 120px;
+        @include Flex(row, center, space-between);
     }
 }
 
@@ -81,7 +89,6 @@ p {
 }
 
 .todos {
-    height: 300px;
     @include Flex(column, center, flex-start);
     .element {
         @include Flex(row, flex-start, space-around);
@@ -90,22 +97,76 @@ p {
         border-radius: 15px;
         margin: 3px;
         .circle {
-            color: #555;
+            color: #999;
         }
         .content {
-            color: #555;
+            color: #999;
+            font-size: 18px;
             width: 100%;
             font-family:Georgia, 'Times New Roman', Times, serif;
             font-weight: bold;
+
+            &:hover {
+                & {
+                    box-shadow: $skyblueBoxShadowing;
+                    border-radius: 3px;
+                }
+            }
+
+        }
+        &:last-child {
+            margin-bottom: 25px;
         }
     }
 }
 
+.upload_container {
+    @include Flex(column, center, flex-start);
+    margin-top: 20px;
+    input {
+        border: 1px solid rgba(#666, 0.3);
+        color: #777;
+        border-radius: 14px;
+        outline: none;
+        cursor: default;
+        text-align: center;
+    }
+
+    button {
+        margin-top: 30px;
+        background-color: $skyblueBtnBackgroundColor;
+        background: $skyblueBtnBackgroundGradiant;
+        box-shadow: $skyblueBtnBox-shadow;
+        font-family: Arial, Helvetica, sans-serif;
+        @include Flex(row, center, center);
+        @include WH(150px, 30px);
+        border-radius: 14px;
+        border: none;
+        color: white;
+        margin-bottom: 100px;
+    }
+}
 
 
 .detail {
-    border: 1px solid black;
-    width: 100px;
-    height: 100px;
-    
+    h2 {
+        color: #777;
+        font-family:'Times New Roman', Times, serif;
+        font-weight: bold;
+        margin-top: 33px;
+    }
+    h3 {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 10px;
+        font-family: sans-serif;
+        &.completed {
+            font-family:Arial, Helvetica, sans-serif;
+            color: rgba(red, 0.6);
+        }
+        &.uncompleted {
+            color: #999;
+        }
+    }
 }
+

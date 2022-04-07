@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 export default [
     {
         id: 0,
         content: '공부하기',
-        completed: false,
+        completed: true,
     },
     {
         id: 1,
