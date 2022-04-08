@@ -9,9 +9,6 @@ import profileImg from './기본프로필이미지.jfif';
 import { faBars, faPlus, faCircleDot, faPenToSquare, faTrashCan, faWrench, faCheck, faHouse, faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function App() {
-  let [todos, todosEdit] = useState(data);
-  let [text, textEdit] = useState('');
-  let [todosCount, todosCountEdit] = useState(0);
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -32,7 +29,7 @@ function App() {
       </Navbar>
       <Switch>
         <Route path="/">
-          <Main todos={ todos } todosEdit={ todosEdit } textEdit={ textEdit } text={ text } todosCount={todosCount} todosCountEdit={todosCountEdit}>
+          <Main>
           </Main>
         </Route>
       </Switch>
@@ -43,15 +40,16 @@ function App() {
 function Main(props) {
   let history = useHistory();
   let { id } = useParams();
-  let todos = props.todos;
-  let todosEdit = props.todosEdit;
-  let text = props.text;
-  let textEdit = props.textEdit;
-  let todosCount = props.todosCount;
-  let todosCountEdit = props.todosCountEdit;
+
+  let [todos, todosEdit] = useState(data);
+  let [text, textEdit] = useState('');
+  let [todosCount, todosCountEdit] = useState(0);
+  
   let [onOff, onOffEdit] = useState(false);
   let [deleteIndex, deleteIndexEdit] = useState(0);
   let [checkIndex, checkIndexEdit] = useState(0);
+  let [editIndex, editIndexEdit] = useState('');
+  let [editId, editIdEdit] = useState(0); 
   return(
     <>
       <div className="container_main">
@@ -74,7 +72,7 @@ function Main(props) {
                   copy[checkIndex].completed = true;
                   todosEdit(copy);
                 } }/>
-                <FontAwesomeIcon icon={ faPenToSquare } className="pen"/>
+                <FontAwesomeIcon icon={ faPenToSquare } className="pen" onClick={ () => { history.push(`/editTodo/${ editId }`) } }/>
                 <FontAwesomeIcon icon={ faTrashCan } className="trash" onClick={ () => {
                   let copy = [...[...todos].slice(0, deleteIndex), ...[...todos].slice(deleteIndex + 1)];
                   todosEdit(copy);
@@ -113,11 +111,14 @@ function Main(props) {
           </Route>
 
           <Route path="/detail/:id">
-            <Detail todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} onOff={onOff} onOffEdit={onOffEdit} deleteIndexEdit={deleteIndexEdit} checkIndexEdit={ checkIndexEdit }>           
+            <Detail todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit} onOff={onOff} onOffEdit={onOffEdit} deleteIndexEdit={deleteIndexEdit} checkIndexEdit={ checkIndexEdit } editIdEdit={editIdEdit}>           
             </Detail>
           </Route>
-          
 
+          <Route path="/editTodo/:id">
+              <EditPage todosEdit={ todosEdit } todos={ todos } text={text} textEdit={textEdit}> editIndexEdit={ editIndexEdit } editId={ editId }</EditPage>
+          </Route>
+          
           <Route path="/">
             <main className="todos">
               {
@@ -182,10 +183,41 @@ function UploadForm(props) {
       <input type="text" onChange={ e => {
         textEdit(e.target.value);
       }} placeholder="할일 입력하기" autoFocus></input>
-      <button type="submit">Add</button>
+      <button className="btn_" type="submit">Add</button>
     </form>
   )
 }
+
+function EditPage(props) {
+  let { id: strId } = useParams();
+  let history = useHistory();
+  let id = +strId;
+  let todosEdit = props.todosEdit;
+  let todos = props.todos;
+  let text = props.text;
+  let textEdit = props.textEdit;
+  let index = todos.findIndex( e => e.id === id );
+  let inputValue = todos[index].content;
+  return(
+    <form className="edit" onSubmit={ (e) => {
+      e.preventDefault();
+      let copy = [...todos];
+      let index = copy.findIndex( e => e.id === id );
+      copy[index].content = text;
+      todosEdit(copy);
+      history.push('/')
+    } }>
+      <input type="text" onChange={ (e) => {
+        textEdit(e.target.value);
+      } } placeholder={ inputValue }></input>
+      <button className="btn_" type="submit">
+        Edit
+      </button>
+    </form>
+  )
+}
+
+
 
 function Detail(props) {
   let { id } = useParams();
@@ -198,14 +230,17 @@ function Detail(props) {
   let onOffEdit = props.onOffEdit;
   let deleteIndexEdit = props.deleteIndexEdit;
   let checkIndexEdit = props.checkIndexEdit;
+  let editIdEdit = props.editIdEdit;
   let index = todos.findIndex( e => e.id === Number(id));
   let item = todos.find( e => e.id === Number(id));
-
   useEffect(() => {
     onOffEdit(true);
     deleteIndexEdit(index);
     checkIndexEdit(index);
-    return () => { onOffEdit(false) }
+    editIdEdit(id);
+    return () => {
+       onOffEdit(false)
+      }
   },[])
 
   return(
